@@ -1,0 +1,40 @@
+name: Validate
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  hacs:
+    runs-on: "ubuntu-latest"
+    steps:
+      - uses: "actions/checkout@v3"
+      
+      - uses: "hacs/action@main"
+        name: HACS validation
+        with:
+          category: "integration"
+          ignore: brands
+
+      - uses: "home-assistant/actions/hassfest@master"
+          
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: pip install -r requirements_dev.txt
+
+      - name: Flake8 lint
+        uses: TrueBrain/actions-flake8@v2
+        with:
+          path: custom_components
+
+      - name: Verify import sorting
+        run: isort --diff --check-only custom_components
