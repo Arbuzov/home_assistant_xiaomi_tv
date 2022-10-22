@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import logging
 
+import aiohttp
 import homeassistant.helpers.config_validation as cv
 import pymitv
 import voluptuous as vol
@@ -85,6 +86,7 @@ class XiaomiTV(MediaPlayerEntity):
 
     _attr_supported_features = (
         MediaPlayerEntityFeature.VOLUME_STEP
+        | MediaPlayerEntityFeature.VOLUME_SET
         | MediaPlayerEntityFeature.VOLUME_MUTE
         | MediaPlayerEntityFeature.TURN_ON
         | MediaPlayerEntityFeature.TURN_OFF
@@ -104,6 +106,8 @@ class XiaomiTV(MediaPlayerEntity):
         self._config_id = f'{DOMAIN}_{self._ip}'
         self._attr_unique_id = f'{self._config_id}_{self.__class__.__name__}'
         self._hass = hass
+        self._volume = 1
+        self._max_volume = 1
 
     @property
     def name(self):
@@ -151,13 +155,42 @@ class XiaomiTV(MediaPlayerEntity):
             self._hass.data[DOMAIN][self._config_id].update({
                 'state': STATE_ON})
 
-    def volume_up(self):
-        """Increase volume by one."""
-        self._tv.volume_up()
+    async def async_update(self):
+        tv_url = 'http://{}:6095/controller?action=getVolume'.format(
+            self._tv.ip_address)
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(tv_url) as resp:
+                    responce = await resp.json(content_type='text/json')
+                    self._volume = responce['data']['volume']
+                    self._max_volume = responce['data']['maxVolume']
+        except Exception as error:
+            _LOGGER.warning(error)
 
-    def volume_down(self):
+    @property
+    def volume_level(self) -> float | None:
+        return self._volume / self._max_volume
+
+    async def async_set_volume_level(self, volume: float) -> None:
+        diff = volume - self._volume / self._max_volume
+        steps = round(diff * self._max_volume)
+        if steps > 0:
+            for x in range(steps):
+                await self._hass.async_add_executor_job(self._tv.volume_up)
+        else:
+            for x in range(-1 * steps):
+                await self._hass.async_add_executor_job(self._tv.volume_down)
+
+    async def async_volume_up(self):
+        """Increase volume by one."""
+        await self._hass.async_add_executor_job(self._tv.volume_up)
+
+    async def async_volume_down(self):
         """Decrease volume by one."""
-        self._tv.volume_down()
+        await self._hass.async_add_executor_job(self._tv.volume_down)
+
+    async def async_mute_volume(self, mute: bool) -> None:
+        self._tv.mute()
 
     @property
     def device_info(self):
