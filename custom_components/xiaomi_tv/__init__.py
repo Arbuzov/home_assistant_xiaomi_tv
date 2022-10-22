@@ -2,11 +2,16 @@
 
 from __future__ import annotations
 
+import fileinput
+import logging
+import os
+
+import pymitv
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 
-from .const import DOMAIN
+from .const import DOMAIN, PYMITV_HACK
 
 PLATFORMS: list[str] = [
     Platform.MEDIA_PLAYER,
@@ -14,9 +19,12 @@ PLATFORMS: list[str] = [
     Platform.SELECT
 ]
 
+_LOGGER = logging.getLogger(__name__)
+
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up oiot from a config entry."""
+    await hack_pymitv(hass)
     if DOMAIN not in hass.data:
         hass.data[DOMAIN] = {}
     if entry.unique_id not in hass.data[DOMAIN]:
@@ -32,3 +40,38 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     if unload_ok:
         hass.data[DOMAIN].pop(entry.unique_id)
     return unload_ok
+
+
+async def hack_pymitv(hass: HomeAssistant):
+    pymitv_path = pymitv.__path__[0]
+    hacked = False
+    for hack in PYMITV_HACK:
+        with fileinput.input(
+            files=(os.path.join(pymitv_path, hack.get('file'))),
+            inplace=True
+        ) as f:
+            line_number = 1
+            for ip_line in f:
+                if hack.get('from') in ip_line and \
+                        ((hack.get('line') is None) or
+                         (hack.get('line') == line_number)):
+                    hacked = True
+                    ip_line = ip_line.replace(hack.get('from'), hack.get('to'))
+                    _LOGGER.warning(
+                        'Hacked file %s line "%s" line %d',
+                        hack.get('file'),
+                        hack.get('from'), line_number)
+
+                print(ip_line, end='')
+                line_number = line_number + 1
+
+    if hacked:
+        await hass.services.async_call(
+            'persistent_notification',
+            'create',
+            {
+                'message': 'Please reboot HA to apply the changes',
+                'title': 'Pymitv was hacked',
+                'notification_id': f'{DOMAIN}_event'
+            }
+        )
