@@ -18,7 +18,6 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
 from .const import DOMAIN
-from .select import XiaomiTVInputSelect
 from .switch import XiaomiTVStatusSwitch
 
 DEFAULT_NAME = 'Xiaomi TV'
@@ -59,8 +58,8 @@ def setup_platform(
             hass.data[DOMAIN][f'{DOMAIN}_{host}'] = {}
             add_entities([
                 XiaomiTV(host, name, hass),
-                XiaomiTVStatusSwitch(host, name, hass),
-                XiaomiTVInputSelect(host, name, hass)])
+                XiaomiTVStatusSwitch(host, name, hass)
+            ])
     else:
         # Otherwise, discover TVs on network.
         entities = []
@@ -68,7 +67,6 @@ def setup_platform(
             hass.data[DOMAIN][f'{DOMAIN}_{host}'] = {'state': STATE_OFF}
             entities.append(XiaomiTV(tv, DEFAULT_NAME, hass))
             entities.append(XiaomiTVStatusSwitch(tv, DEFAULT_NAME, hass))
-            entities.append(XiaomiTVInputSelect(tv, DEFAULT_NAME, hass))
         add_entities(entities)
 
 
@@ -94,6 +92,8 @@ class XiaomiTV(MediaPlayerEntity):
     )
 
     _attr_device_class = MediaPlayerDeviceClass.TV
+    _attr_source_list = ['hdmi1', 'hdmi2']
+    _app_list = None
 
     def __init__(self, ip: str, name: str, hass: HomeAssistant):
         """Receive IP address and name to construct class."""
