@@ -15,8 +15,7 @@ from .const import DOMAIN, PYMITV_HACK
 
 PLATFORMS: list[str] = [
     Platform.MEDIA_PLAYER,
-    Platform.SWITCH,
-    Platform.SELECT
+    Platform.SWITCH
 ]
 
 _LOGGER = logging.getLogger(__name__)
