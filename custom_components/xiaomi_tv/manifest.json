@@ -7,6 +7,6 @@
   "iot_class": "assumed_state",
   "loggers": ["pymitv"],
   "config_flow": true,
-  "version": "2022.12.14",
+  "version": "2023.05.04",
   "issue_tracker": "https://github.com/Arbuzov/home_assistant_xiaomi_tv/issues"
 }

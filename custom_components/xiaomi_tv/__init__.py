@@ -6,12 +6,13 @@ import fileinput
 import logging
 import os
 
-import pymitv
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
+import pymitv
 
 from .const import DOMAIN, PYMITV_HACK
+
 
 PLATFORMS: list[str] = [
     Platform.MEDIA_PLAYER,
@@ -28,7 +29,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass.data[DOMAIN] = {}
     if entry.unique_id not in hass.data[DOMAIN]:
         hass.data[DOMAIN][entry.unique_id] = {}
-    hass.config_entries.async_setup_platforms(entry, PLATFORMS)
+    hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
 
 
@@ -73,4 +74,9 @@ async def hack_pymitv(hass: HomeAssistant):
                 'title': 'Pymitv was hacked',
                 'notification_id': f'{DOMAIN}_event'
             }
+        )
+        await hass.services.async_call(
+            'homeassistant',
+            'restart',
+            {}
         )
