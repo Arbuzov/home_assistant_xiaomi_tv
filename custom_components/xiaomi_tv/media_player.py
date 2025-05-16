@@ -138,6 +138,9 @@ class XiaomiTV(MediaPlayerEntity):
             )
         else:
             self._tv.change_source(source)
+            await self._hass.async_create_task(
+                self._tv.change_source(source)
+            )
         self._hass.data[DOMAIN][self._config_id].update({'source': source})
 
     @property
