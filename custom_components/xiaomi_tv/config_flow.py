@@ -10,7 +10,6 @@ from homeassistant.data_entry_flow import FlowResult
 
 from .const import DOMAIN
 
-
 STEP_USER_DATA_SCHEMA = voluptuous.Schema(
     {
         voluptuous.Required(CONF_NAME): str,
