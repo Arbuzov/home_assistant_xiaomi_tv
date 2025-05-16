@@ -86,16 +86,16 @@ async def async_setup_entry(
 class XiaomiTV(MediaPlayerEntity):
     """Represent the Xiaomi TV for Home Assistant."""
 
-    _attr_supported_features = (
-        MediaPlayerEntityFeature.VOLUME_STEP
-        | MediaPlayerEntityFeature.VOLUME_SET
-        | MediaPlayerEntityFeature.VOLUME_MUTE
-        | MediaPlayerEntityFeature.TURN_ON
-        | MediaPlayerEntityFeature.TURN_OFF
-        | MediaPlayerEntityFeature.SELECT_SOURCE
-#       | MediaPlayerEntityFeature.BROWSE_MEDIA
-        | MediaPlayerEntityFeature.PLAY_MEDIA
-    )
+_attr_supported_features = (
+    MediaPlayerEntityFeature.VOLUME_STEP
+    | MediaPlayerEntityFeature.VOLUME_SET
+    | MediaPlayerEntityFeature.VOLUME_MUTE
+    | MediaPlayerEntityFeature.TURN_ON
+    | MediaPlayerEntityFeature.TURN_OFF
+    | MediaPlayerEntityFeature.SELECT_SOURCE
+    # | MediaPlayerEntityFeature.BROWSE_MEDIA
+    | MediaPlayerEntityFeature.PLAY_MEDIA
+)
 
     _attr_device_class = MediaPlayerDeviceClass.TV
     _attr_source_list = ['hdmi1', 'hdmi2', 'cast']
