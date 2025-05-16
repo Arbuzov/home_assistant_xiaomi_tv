@@ -89,10 +89,12 @@ class XiaomiTV(MediaPlayerEntity):
         | MediaPlayerEntityFeature.TURN_ON
         | MediaPlayerEntityFeature.TURN_OFF
         | MediaPlayerEntityFeature.SELECT_SOURCE
+        | MediaPlayerEntityFeature.BROWSE_MEDIA
+        | MediaPlayerEntityFeature.PLAY_MEDIA
     )
 
     _attr_device_class = MediaPlayerDeviceClass.TV
-    _attr_source_list = ['hdmi1', 'hdmi2']
+    _attr_source_list = ['hdmi1', 'hdmi2', 'cast']
     _app_list = None
 
     def __init__(self, ip: str, name: str, hass: HomeAssistant):
@@ -125,7 +127,14 @@ class XiaomiTV(MediaPlayerEntity):
 
     def select_source(self, source):
         """Select input source."""
-        self._tv.change_source(source)
+        if source == 'cast':
+            self._hass.async_create_task(
+                self._async_start_app(
+                    'com.xiaomi.mitv.smartshare'
+                )
+            )
+        else:
+            self._tv.change_source(source)
         self._hass.data[DOMAIN][self._config_id].update({'source': source})
 
     @property
@@ -164,6 +173,14 @@ class XiaomiTV(MediaPlayerEntity):
                     responce = await resp.json(content_type='text/json')
                     self._volume = responce['data']['volume']
                     self._max_volume = responce['data']['maxVolume']
+        except aiohttp.ClientError as error:
+            _LOGGER.warning(error)
+
+    async def _async_start_app(self, package: str) -> None:
+        tv_url = f'http://{self._tv.ip_address}:6095/controller?action=startapp&type=packagename&packagename={package}'
+        try:
+            async with aiohttp.ClientSession() as session:
+                await session.get(tv_url)
         except Exception as error:
             _LOGGER.warning(error)
 
