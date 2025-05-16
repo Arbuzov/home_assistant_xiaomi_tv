@@ -91,7 +91,7 @@ class XiaomiTV(MediaPlayerEntity):
         | MediaPlayerEntityFeature.TURN_ON
         | MediaPlayerEntityFeature.TURN_OFF
         | MediaPlayerEntityFeature.SELECT_SOURCE
-        # | MediaPlayerEntityFeature.BROWSE_MEDIA
+        | MediaPlayerEntityFeature.BROWSE_MEDIA
         | MediaPlayerEntityFeature.PLAY_MEDIA
     )
 
@@ -128,10 +128,10 @@ class XiaomiTV(MediaPlayerEntity):
         """Return the current input source."""
         return self._hass.data[DOMAIN][self._config_id].get('source', 'hdmi1')
 
-    def select_source(self, source):
+    async def async_select_source(self, source):
         """Select input source."""
         if source == 'cast':
-            self._hass.async_create_task(
+            await self._hass.async_create_task(
                 self._async_start_app(
                     'com.xiaomi.mitv.smartshare'
                 )
@@ -208,10 +208,10 @@ class XiaomiTV(MediaPlayerEntity):
         diff = volume - self._volume / self._max_volume
         steps = round(diff * self._max_volume)
         if steps > 0:
-            for x in range(steps):
+            for _ in range(steps):
                 await self._hass.async_add_executor_job(self._tv.volume_up)
         else:
-            for x in range(-1 * steps):
+            for _ in range(-1 * steps):
                 await self._hass.async_add_executor_job(self._tv.volume_down)
 
     async def async_volume_up(self):

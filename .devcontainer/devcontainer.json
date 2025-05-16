@@ -1,1 +1,13 @@
-{}
+{
+  "name": "Python 3.13 Dev Container",
+  "image": "mcr.microsoft.com/devcontainers/python:3.13",
+  "features": {},
+  "settings": {
+    "python.defaultInterpreterPath": "/usr/local/bin/python"
+  },
+  "extensions": [
+    "ms-python.python",
+    "ms-python.vscode-pylance"
+  ],
+  "postCreateCommand": "pip install --upgrade pip && pip install -r requirements_dev.txt"
+}
