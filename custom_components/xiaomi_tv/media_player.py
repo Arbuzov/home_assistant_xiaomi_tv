@@ -6,11 +6,15 @@ import logging
 import aiohttp
 import homeassistant.helpers.config_validation as cv
 import pymitv
+from typing import Any
 import voluptuous as vol
-from homeassistant.components.media_player import (PLATFORM_SCHEMA,
-                                                   MediaPlayerDeviceClass,
-                                                   MediaPlayerEntity,
-                                                   MediaPlayerEntityFeature)
+from homeassistant.components.media_player import (
+    PLATFORM_SCHEMA,
+    MediaPlayerDeviceClass,
+    MediaPlayerEntity,
+    MediaPlayerEntityFeature,
+    MediaType
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_NAME, STATE_OFF, STATE_ON
 from homeassistant.core import HomeAssistant
@@ -89,7 +93,7 @@ class XiaomiTV(MediaPlayerEntity):
         | MediaPlayerEntityFeature.TURN_ON
         | MediaPlayerEntityFeature.TURN_OFF
         | MediaPlayerEntityFeature.SELECT_SOURCE
-        | MediaPlayerEntityFeature.BROWSE_MEDIA
+#       | MediaPlayerEntityFeature.BROWSE_MEDIA
         | MediaPlayerEntityFeature.PLAY_MEDIA
     )
 
@@ -123,6 +127,7 @@ class XiaomiTV(MediaPlayerEntity):
 
     @property
     def source(self):
+        """Return the current input source."""
         return self._hass.data[DOMAIN][self._config_id].get('source', 'hdmi1')
 
     def select_source(self, source):
@@ -141,6 +146,12 @@ class XiaomiTV(MediaPlayerEntity):
     def assumed_state(self):
         """Indicate that state is assumed."""
         return True
+
+    async def async_play_media(
+        self, media_type: MediaType | str, media_id: str, **kwargs: Any
+    ) -> None:
+        """Play media on the TV."""
+        pass
 
     def turn_off(self):
         """
@@ -165,30 +176,37 @@ class XiaomiTV(MediaPlayerEntity):
                 'state': STATE_ON})
 
     async def async_update(self):
+        """Update the TV state and volume."""
         tv_url = 'http://{}:6095/controller?action=getVolume'.format(
             self._tv.ip_address)
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(tv_url) as resp:
-                    responce = await resp.json(content_type='text/json')
-                    self._volume = responce['data']['volume']
-                    self._max_volume = responce['data']['maxVolume']
+                    response = await resp.json(content_type='text/json')
+                    self._volume = response['data']['volume']
+                    self._max_volume = response['data']['maxVolume']
         except aiohttp.ClientError as error:
             _LOGGER.warning(error)
 
     async def _async_start_app(self, package: str) -> None:
-        tv_url = f'http://{self._tv.ip_address}:6095/controller?action=startapp&type=packagename&packagename={package}'
+        """Start an app on the TV."""
+        tv_url = (
+            f'http://{self._tv.ip_address}:6095/controller'
+            f'?action=startapp&type=packagename&packagename={package}'
+        )
         try:
             async with aiohttp.ClientSession() as session:
                 await session.get(tv_url)
-        except Exception as error:
+        except aiohttp.ClientError as error:
             _LOGGER.warning(error)
 
     @property
     def volume_level(self) -> float | None:
+        """Return the current volume level."""
         return self._volume / self._max_volume
 
     async def async_set_volume_level(self, volume: float) -> None:
+        """Set the volume level."""
         diff = volume - self._volume / self._max_volume
         steps = round(diff * self._max_volume)
         if steps > 0:
@@ -207,6 +225,7 @@ class XiaomiTV(MediaPlayerEntity):
         await self._hass.async_add_executor_job(self._tv.volume_down)
 
     async def async_mute_volume(self, mute: bool) -> None:
+        """Mute the volume."""
         self._tv.mute()
 
     @property

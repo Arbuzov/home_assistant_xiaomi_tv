@@ -1,4 +1,4 @@
-DOMAIN = "xiaomi_tv"
+DOMAIN = 'xiaomi_tv'
 
 PYMITV_HACK = [
     {

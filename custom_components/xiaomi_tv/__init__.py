@@ -39,7 +39,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         unload_ok = await hass.config_entries.async_unload_platforms(
             entry, PLATFORMS)
     except ValueError as error:
-        if str(error) == "Config entry was never loaded!":
+        if str(error) == 'Config entry was never loaded!':
             unload_ok = True
     if unload_ok:
         hass.data[DOMAIN].pop(entry.unique_id)

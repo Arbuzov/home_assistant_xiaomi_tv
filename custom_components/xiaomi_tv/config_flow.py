@@ -1,7 +1,6 @@
 """Config flow for the smart curtain integration."""
 from __future__ import annotations
 
-import logging
 from typing import Any
 
 import voluptuous
@@ -11,7 +10,6 @@ from homeassistant.data_entry_flow import FlowResult
 
 from .const import DOMAIN
 
-_LOGGER = logging.getLogger(__name__)
 
 STEP_USER_DATA_SCHEMA = voluptuous.Schema(
     {
