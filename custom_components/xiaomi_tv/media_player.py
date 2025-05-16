@@ -2,19 +2,17 @@
 from __future__ import annotations
 
 import logging
+from typing import Any
 
 import aiohttp
 import homeassistant.helpers.config_validation as cv
 import pymitv
-from typing import Any
 import voluptuous as vol
-from homeassistant.components.media_player import (
-    PLATFORM_SCHEMA,
-    MediaPlayerDeviceClass,
-    MediaPlayerEntity,
-    MediaPlayerEntityFeature,
-    MediaType
-)
+from homeassistant.components.media_player import (PLATFORM_SCHEMA,
+                                                   MediaPlayerDeviceClass,
+                                                   MediaPlayerEntity,
+                                                   MediaPlayerEntityFeature,
+                                                   MediaType)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_NAME, STATE_OFF, STATE_ON
 from homeassistant.core import HomeAssistant
