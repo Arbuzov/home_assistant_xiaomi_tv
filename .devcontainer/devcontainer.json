@@ -1,6 +1,6 @@
 {
   "name": "Python 3.13 Dev Container",
-  "image": "mcr.microsoft.com/devcontainers/python:3.13",
+  "image": "python:3.13-bullseye",
   "features": {},
   "customizations": {
     "vscode": {

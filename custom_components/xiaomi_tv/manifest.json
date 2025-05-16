@@ -1,12 +1,12 @@
 {
   "domain": "xiaomi_tv",
   "name": "Xiaomi TV",
-  "documentation": "https://github.com/Arbuzov/home_assistant_xiaomi_tv",
-  "requirements": ["pymitv==1.5.0"],
   "codeowners": ["@simse", "@arbuzov"],
-  "iot_class": "assumed_state",
-  "loggers": ["pymitv"],
   "config_flow": true,
-  "version": "2025.05.16",
-  "issue_tracker": "https://github.com/Arbuzov/home_assistant_xiaomi_tv/issues"
+  "documentation": "https://github.com/Arbuzov/home_assistant_xiaomi_tv",
+  "iot_class": "assumed_state",
+  "issue_tracker": "https://github.com/Arbuzov/home_assistant_xiaomi_tv/issues",
+  "loggers": ["pymitv"],
+  "requirements": ["pymitv==1.5.0"],
+  "version": "2025.05.16"
 }
