@@ -8,15 +8,12 @@ import aiohttp
 import homeassistant.helpers.config_validation as cv
 import pymitv
 import voluptuous as vol
-from homeassistant.components.media_player import (
-    BrowseMedia,
-    PLATFORM_SCHEMA,
-    MediaClass,
-    MediaPlayerDeviceClass,
-    MediaPlayerEntity,
-    MediaPlayerEntityFeature,
-    MediaType
-)
+from homeassistant.components.media_player import (PLATFORM_SCHEMA,
+                                                   BrowseMedia, MediaClass,
+                                                   MediaPlayerDeviceClass,
+                                                   MediaPlayerEntity,
+                                                   MediaPlayerEntityFeature,
+                                                   MediaType)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_NAME, STATE_OFF, STATE_ON
 from homeassistant.core import HomeAssistant
