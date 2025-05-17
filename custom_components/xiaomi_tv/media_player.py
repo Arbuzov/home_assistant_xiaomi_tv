@@ -166,7 +166,7 @@ class XiaomiTV(MediaPlayerEntity):
                     media_class=MediaClass.APP,
                     media_content_id=item['PackageName'],
                     media_content_type=MediaType.APP,
-                    thumbnail=item['IconURL'],
+                    thumbnail=item['IconURL'].replace('\\', ''),
                     can_play=True,
                     can_expand=False,
                     children=[]
