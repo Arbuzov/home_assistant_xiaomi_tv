@@ -13,6 +13,8 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.issue_registry import (IssueSeverity,
                                                   async_create_issue)
 
+from .proxy import MyProxyView
+
 from .const import DOMAIN, PYMITV_HACK
 
 PLATFORMS: list[str] = [
@@ -26,6 +28,7 @@ _LOGGER = logging.getLogger(__name__)
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up oiot from a config entry."""
     await hass.async_create_task(hack_pymitv(hass))
+    hass.http.register_view(MyProxyView)
     if DOMAIN not in hass.data:
         hass.data[DOMAIN] = {}
     if entry.unique_id not in hass.data[DOMAIN]:
