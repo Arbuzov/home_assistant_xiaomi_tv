@@ -150,7 +150,8 @@ class XiaomiTV(MediaPlayerEntity):
         return True
 
     async def async_browse_media(
-        self, media_content_type: str | None = None, media_content_id: str | None = None
+        self, media_content_type: str | None = None,
+        media_content_id: str | None = None
     ) -> BrowseMedia:
         """Play media on the TV."""
         return []
