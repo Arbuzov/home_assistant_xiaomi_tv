@@ -8,13 +8,15 @@ import aiohttp
 import homeassistant.helpers.config_validation as cv
 import pymitv
 import voluptuous as vol
-from homeassistant.components.media_player import (BrowseMedia,
-                                                   PLATFORM_SCHEMA,
-                                                   MediaClass,
-                                                   MediaPlayerDeviceClass,
-                                                   MediaPlayerEntity,
-                                                   MediaPlayerEntityFeature,
-                                                   MediaType)
+from homeassistant.components.media_player import (
+    BrowseMedia,
+    PLATFORM_SCHEMA,
+    MediaClass,
+    MediaPlayerDeviceClass,
+    MediaPlayerEntity,
+    MediaPlayerEntityFeature,
+    MediaType
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_NAME, STATE_OFF, STATE_ON
 from homeassistant.core import HomeAssistant
@@ -242,7 +244,7 @@ class XiaomiTV(MediaPlayerEntity):
 
     async def _async_get_apps(self) -> list:
         """Get the list of apps installed on the TV."""
-        tv_url =  (
+        tv_url = (
             f'http://{self._tv.ip_address}:6095/controller'
             '?action=getinstalledapp&count=999&changeIcon=1'
         )
