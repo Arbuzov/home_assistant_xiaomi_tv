@@ -154,7 +154,45 @@ class XiaomiTV(MediaPlayerEntity):
         media_content_id: str | None = None
     ) -> BrowseMedia:
         """Play media on the TV."""
-        return []
+        media_list = [
+            {
+                "title": "Sample Video 1",
+                "media_content_id": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                "media_content_type": "video/mp4",
+                "thumbnail": "https://peach.blender.org/wp-content/uploads/title_anouncement.jpg?x11217"
+            },
+            {
+                "title": "Sample Video 2",
+                "media_content_id": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+                "media_content_type": "video/mp4",
+                "thumbnail": "https://orange.blender.org/wp-content/themes/orange/images/common/ed_head.jpg"
+            }
+        ]
+
+        children = []
+        for item in media_list:
+            children.append(
+                BrowseMedia(
+                    title=item["title"],
+                    media_class="video",
+                    media_content_id=item["media_content_id"],
+                    media_content_type=item["media_content_type"],
+                    thumbnail=item["thumbnail"],
+                    can_play=True,
+                    can_expand=False,
+                    children=[]
+                )
+            )
+
+        return BrowseMedia(
+            title="Xiaomi TV Media",
+            media_class="directory",
+            media_content_id="root",
+            media_content_type="directory",
+            can_play=False,
+            can_expand=True,
+            children=children
+        )
 
     async def async_play_media(
         self, media_type: MediaType | str, media_id: str, **kwargs: Any
