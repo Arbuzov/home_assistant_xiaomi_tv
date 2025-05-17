@@ -10,6 +10,7 @@ import pymitv
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.issue_registry import IssueSeverity, async_create_issue
 
 from .const import DOMAIN, PYMITV_HACK
 
@@ -23,7 +24,7 @@ _LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up oiot from a config entry."""
-    await hack_pymitv(hass)
+    await hass.async_create_task(hack_pymitv(hass))
     if DOMAIN not in hass.data:
         hass.data[DOMAIN] = {}
     if entry.unique_id not in hass.data[DOMAIN]:
@@ -78,8 +79,12 @@ async def hack_pymitv(hass: HomeAssistant):
                 'notification_id': f'{DOMAIN}_event'
             }
         )
-        await hass.services.async_call(
-            'homeassistant',
-            'restart',
-            {}
+        async_create_issue(
+            hass=hass,
+            domain=DOMAIN,
+            issue_id=f"restart_required_{DOMAIN}",
+            is_fixable=True,
+            issue_domain=DOMAIN,
+            severity=IssueSeverity.WARNING,
+            translation_key="restart_required"
         )

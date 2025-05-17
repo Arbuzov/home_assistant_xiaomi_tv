@@ -1,5 +1,5 @@
-flake8-quotes==3.3.0
-flake8==3.9.2
+flake8
 homeassistant
-isort==5.9.3
+isort
+pylint
 pymitv

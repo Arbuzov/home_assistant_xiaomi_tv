@@ -156,9 +156,7 @@ class XiaomiTV(MediaPlayerEntity):
     ) -> BrowseMedia:
         """Play media on the TV."""
         media_list = await self._hass.async_create_task(
-            self._async_get_apps(
-                'com.xiaomi.mitv.smartshare'
-            )
+            self._async_get_apps()
         )
 
         children = []
@@ -241,7 +239,7 @@ class XiaomiTV(MediaPlayerEntity):
                 await session.get(tv_url)
         except aiohttp.ClientError as error:
             _LOGGER.warning(error)
-            
+
     async def _async_get_apps(self) -> list:
         """Get the list of apps installed on the TV."""
         tv_url =  (
