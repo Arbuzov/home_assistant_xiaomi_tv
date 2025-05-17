@@ -162,7 +162,7 @@ class XiaomiTV(MediaPlayerEntity):
         for item in media_list:
             children.append(
                 BrowseMedia(
-                    title=item['Calendar'],
+                    title=item['AppName'],
                     media_class=MediaClass.APP,
                     media_content_id=item['PackageName'],
                     media_content_type=MediaType.APP,
