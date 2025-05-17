@@ -10,6 +10,7 @@ import pymitv
 import voluptuous as vol
 from homeassistant.components.media_player import (BrowseMedia,
                                                    PLATFORM_SCHEMA,
+                                                   MediaClass,
                                                    MediaPlayerDeviceClass,
                                                    MediaPlayerEntity,
                                                    MediaPlayerEntityFeature,
@@ -168,16 +169,22 @@ class XiaomiTV(MediaPlayerEntity):
                 "thumbnail": "https://orange.blender.org/wp-content/themes/orange/images/common/ed_head.jpg"
             }
         ]
+        
+        media_list = await self._hass.async_create_task(
+            self._async_get_apps(
+                'com.xiaomi.mitv.smartshare'
+            )
+        )
 
         children = []
         for item in media_list:
             children.append(
                 BrowseMedia(
-                    title=item["title"],
-                    media_class="video",
-                    media_content_id=item["media_content_id"],
-                    media_content_type=item["media_content_type"],
-                    thumbnail=item["thumbnail"],
+                    title=item["Calendar"],
+                    media_class=MediaClass.APP,
+                    media_content_id=item["PackageName"],
+                    media_content_type=MediaType.APP,
+                    thumbnail=item["IconURL"],
                     can_play=True,
                     can_expand=False,
                     children=[]
@@ -198,7 +205,10 @@ class XiaomiTV(MediaPlayerEntity):
         self, media_type: MediaType | str, media_id: str, **kwargs: Any
     ) -> None:
         """Play media on the TV."""
-        pass
+        if media_type == MediaType.APP:
+            await self._hass.async_create_task(
+                self._async_start_app(media_id)
+            )
 
     def turn_off(self):
         """
@@ -246,6 +256,21 @@ class XiaomiTV(MediaPlayerEntity):
                 await session.get(tv_url)
         except aiohttp.ClientError as error:
             _LOGGER.warning(error)
+            
+    async def _async_get_apps(self) -> list:
+        """Get the list of apps installed on the TV."""
+        tv_url =  (
+            f'http://{self._tv.ip_address}:6095/controller'
+            '?action=getinstalledapp&count=999&changeIcon=1'
+        )
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(tv_url) as resp:
+                    response = await resp.json(content_type='text/json')
+                    return response['data']['AppInfo']
+        except aiohttp.ClientError as error:
+            _LOGGER.warning(error)
+            return []
 
     @property
     def volume_level(self) -> float | None:
