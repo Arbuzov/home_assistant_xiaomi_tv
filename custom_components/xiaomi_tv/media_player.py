@@ -8,7 +8,8 @@ import aiohttp
 import homeassistant.helpers.config_validation as cv
 import pymitv
 import voluptuous as vol
-from homeassistant.components.media_player import (PLATFORM_SCHEMA,
+from homeassistant.components.media_player import (BrowseMedia,
+                                                   PLATFORM_SCHEMA,
                                                    MediaPlayerDeviceClass,
                                                    MediaPlayerEntity,
                                                    MediaPlayerEntityFeature,
@@ -147,6 +148,12 @@ class XiaomiTV(MediaPlayerEntity):
     def assumed_state(self):
         """Indicate that state is assumed."""
         return True
+
+    async def async_browse_media(
+        self, media_content_type: str | None = None, media_content_id: str | None = None
+    ) -> BrowseMedia:
+        """Play media on the TV."""
+        return []
 
     async def async_play_media(
         self, media_type: MediaType | str, media_id: str, **kwargs: Any
