@@ -155,21 +155,6 @@ class XiaomiTV(MediaPlayerEntity):
         media_content_id: str | None = None
     ) -> BrowseMedia:
         """Play media on the TV."""
-        media_list = [
-            {
-                "title": "Sample Video 1",
-                "media_content_id": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-                "media_content_type": "video/mp4",
-                "thumbnail": "https://peach.blender.org/wp-content/uploads/title_anouncement.jpg?x11217"
-            },
-            {
-                "title": "Sample Video 2",
-                "media_content_id": "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-                "media_content_type": "video/mp4",
-                "thumbnail": "https://orange.blender.org/wp-content/themes/orange/images/common/ed_head.jpg"
-            }
-        ]
-        
         media_list = await self._hass.async_create_task(
             self._async_get_apps(
                 'com.xiaomi.mitv.smartshare'
@@ -180,11 +165,11 @@ class XiaomiTV(MediaPlayerEntity):
         for item in media_list:
             children.append(
                 BrowseMedia(
-                    title=item["Calendar"],
+                    title=item['Calendar'],
                     media_class=MediaClass.APP,
-                    media_content_id=item["PackageName"],
+                    media_content_id=item['PackageName'],
                     media_content_type=MediaType.APP,
-                    thumbnail=item["IconURL"],
+                    thumbnail=item['IconURL'],
                     can_play=True,
                     can_expand=False,
                     children=[]
@@ -192,10 +177,10 @@ class XiaomiTV(MediaPlayerEntity):
             )
 
         return BrowseMedia(
-            title="Xiaomi TV Media",
-            media_class="directory",
-            media_content_id="root",
-            media_content_type="directory",
+            title='Xiaomi TV Media',
+            media_class='directory',
+            media_content_id='root',
+            media_content_type='directory',
             can_play=False,
             can_expand=True,
             children=children
