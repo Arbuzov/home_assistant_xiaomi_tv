@@ -10,8 +10,11 @@ import pymitv
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.issue_registry import (IssueSeverity,
-                                                  async_create_issue)
+from homeassistant.helpers.issue_registry import (
+    IssueSeverity,
+    async_create_issue
+)
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .proxy import MyProxyView
 
@@ -28,8 +31,8 @@ _LOGGER = logging.getLogger(__name__)
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up oiot from a config entry."""
     await hass.async_create_task(hack_pymitv(hass))
-    # Исправлено: создаём экземпляр MyProxyView с websession
-    websession = hass.helpers.aiohttp_client.async_get_clientsession(hass)
+    # Исправлено: используем импортированный async_get_clientsession
+    websession = async_get_clientsession(hass)
     hass.http.register_view(MyProxyView(websession))
     if DOMAIN not in hass.data:
         hass.data[DOMAIN] = {}
