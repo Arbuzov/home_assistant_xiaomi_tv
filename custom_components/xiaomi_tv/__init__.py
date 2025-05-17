@@ -28,7 +28,9 @@ _LOGGER = logging.getLogger(__name__)
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up oiot from a config entry."""
     await hass.async_create_task(hack_pymitv(hass))
-    hass.http.register_view(MyProxyView)
+    # Исправлено: создаём экземпляр MyProxyView с websession
+    websession = hass.helpers.aiohttp_client.async_get_clientsession(hass)
+    hass.http.register_view(MyProxyView(websession))
     if DOMAIN not in hass.data:
         hass.data[DOMAIN] = {}
     if entry.unique_id not in hass.data[DOMAIN]:
