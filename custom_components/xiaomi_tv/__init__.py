@@ -27,7 +27,7 @@ LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up oiot from a config entry."""
-    await hass.async_add_executor_job(hack_pymitv(hass))
+    await hass.async_create_task(hack_pymitv(hass))
     # Исправлено: используем импортированный async_get_clientsession
     websession = async_get_clientsession(hass)
     hass.http.register_view(MyProxyView(websession))
@@ -53,27 +53,31 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
 
 async def hack_pymitv(hass: HomeAssistant):
-    pymitv_path = pymitv.__path__[0]
-    hacked = False
-    for hack in PYMITV_HACK:
-        with fileinput.input(
-            files=(os.path.join(pymitv_path, hack.get('file'))),
-            inplace=True
-        ) as f:
-            line_number = 1
-            for ip_line in f:
-                if hack.get('from') in ip_line and \
-                        ((hack.get('line') is None) or
-                         (hack.get('line') == line_number)):
-                    hacked = True
-                    ip_line = ip_line.replace(hack.get('from'), hack.get('to'))
-                    LOGGER.warning(
-                        'Hacked file %s line "%s" line %d',
-                        hack.get('file'),
-                        hack.get('from'), line_number)
+    def _hack_pymitv_sync():
+        pymitv_path = pymitv.__path__[0]
+        hacked = False
+        for hack in PYMITV_HACK:
+            with fileinput.input(
+                files=(os.path.join(pymitv_path, hack.get('file'))),
+                inplace=True
+            ) as f:
+                line_number = 1
+                for ip_line in f:
+                    if hack.get('from') in ip_line and \
+                            ((hack.get('line') is None) or
+                             (hack.get('line') == line_number)):
+                        hacked = True
+                        ip_line = ip_line.replace(hack.get('from'), hack.get('to'))
+                        LOGGER.warning(
+                            'Hacked file %s line "%s" line %d',
+                            hack.get('file'),
+                            hack.get('from'), line_number)
 
-                print(ip_line, end='')
-                line_number = line_number + 1
+                    print(ip_line, end='')
+                    line_number = line_number + 1
+        return hacked
+
+    hacked = await hass.async_add_executor_job(_hack_pymitv_sync)
 
     if hacked:
         await hass.services.async_call(
