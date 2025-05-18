@@ -253,6 +253,7 @@ class XiaomiTV(MediaPlayerEntity):
             async with aiohttp.ClientSession() as session:
                 async with session.get(tv_url) as resp:
                     response = await resp.json(content_type='text/json')
+                    LOGGER.warning(response['data'])
                     return response['data']['AppInfo']
         except aiohttp.ClientError as error:
             LOGGER.warning(error)
