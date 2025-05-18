@@ -25,7 +25,7 @@ PLATFORMS: list[str] = [
     Platform.SWITCH
 ]
 
-_LOGGER = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -70,7 +70,7 @@ async def hack_pymitv(hass: HomeAssistant):
                          (hack.get('line') == line_number)):
                     hacked = True
                     ip_line = ip_line.replace(hack.get('from'), hack.get('to'))
-                    _LOGGER.warning(
+                    LOGGER.warning(
                         'Hacked file %s line "%s" line %d',
                         hack.get('file'),
                         hack.get('from'), line_number)

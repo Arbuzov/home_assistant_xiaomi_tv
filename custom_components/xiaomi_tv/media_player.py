@@ -25,7 +25,7 @@ from .switch import XiaomiTVStatusSwitch
 
 DEFAULT_NAME = 'Xiaomi TV'
 
-_LOGGER = logging.getLogger(__name__)
+LOGGER = logging.getLogger(__name__)
 
 # No host is needed for configuration, however it can be set.
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
@@ -54,7 +54,7 @@ def setup_platform(
     if host is not None:
         # Check if there's a valid TV at the IP address.
         if not pymitv.Discover().check_ip(host):
-            _LOGGER.error(
+            LOGGER.error(
                 'Could not find Xiaomi TV with specified IP: %s', host)
         else:
             # Register TV with Home Assistant.
@@ -225,7 +225,7 @@ class XiaomiTV(MediaPlayerEntity):
                     self._volume = response['data']['volume']
                     self._max_volume = response['data']['maxVolume']
         except aiohttp.ClientError as error:
-            _LOGGER.warning(error)
+            LOGGER.warning(error)
 
     async def _async_start_app(self, package: str) -> None:
         """Start an app on the TV."""
@@ -237,7 +237,7 @@ class XiaomiTV(MediaPlayerEntity):
             async with aiohttp.ClientSession() as session:
                 await session.get(tv_url)
         except aiohttp.ClientError as error:
-            _LOGGER.warning(error)
+            LOGGER.warning(error)
 
     async def _async_get_apps(self) -> list:
         """Get the list of apps installed on the TV."""
@@ -251,7 +251,7 @@ class XiaomiTV(MediaPlayerEntity):
                     response = await resp.json(content_type='text/json')
                     return response['data']['AppInfo']
         except aiohttp.ClientError as error:
-            _LOGGER.warning(error)
+            LOGGER.warning(error)
             return []
 
     @property
