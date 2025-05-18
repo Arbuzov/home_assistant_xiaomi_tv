@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import logging
 from typing import Any
+from urllib.parse import quote
 
 import aiohttp
 import homeassistant.helpers.config_validation as cv
@@ -19,7 +20,6 @@ from homeassistant.const import CONF_HOST, CONF_NAME, STATE_OFF, STATE_ON
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
-from urllib.parse import quote
 
 from .const import DOMAIN
 from .switch import XiaomiTVStatusSwitch
@@ -169,7 +169,7 @@ class XiaomiTV(MediaPlayerEntity):
                     media_content_type=MediaType.APP,
                     thumbnail=(
                         '/api/xiaomi_tv/proxy/?url=',
-                        f'{quote(item['IconURL'].replace('\\', ''))}'
+                        quote(item['IconURL'].replace('\\', ''))
                     ),
                     can_play=True,
                     can_expand=False,

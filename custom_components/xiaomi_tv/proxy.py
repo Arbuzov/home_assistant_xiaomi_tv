@@ -1,5 +1,6 @@
 import logging
-from .hass_web_proxy_lib import ProxyView, ProxiedURL
+
+from .hass_web_proxy_lib import ProxiedURL, ProxyView
 
 LOGGER = logging.getLogger(__name__)
 

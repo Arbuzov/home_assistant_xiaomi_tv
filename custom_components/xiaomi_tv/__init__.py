@@ -10,15 +10,12 @@ import pymitv
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.issue_registry import (
-    IssueSeverity,
-    async_create_issue
-)
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-
-from .proxy import MyProxyView
+from homeassistant.helpers.issue_registry import (IssueSeverity,
+                                                  async_create_issue)
 
 from .const import DOMAIN, PYMITV_HACK
+from .proxy import MyProxyView
 
 PLATFORMS: list[str] = [
     Platform.MEDIA_PLAYER,
