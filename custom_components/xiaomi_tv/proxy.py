@@ -18,7 +18,7 @@ class MyProxyView(ProxyView):
             return None
 
         try:
-            return ProxiedURL(target_url, method="GET", headers={}, data=None)
+            return ProxiedURL(target_url, headers={})
         except Exception as e:
             LOGGER.error(f"Failed to create proxied URL: {e}")
             return None
