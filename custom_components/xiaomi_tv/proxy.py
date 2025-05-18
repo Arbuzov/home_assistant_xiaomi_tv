@@ -5,7 +5,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 class MyProxyView(ProxyView):
-    """Прокси-представление для вашей интеграции."""
+    """Proxy image to the Xiaomi TV."""
 
     url = "/api/xiaomi_tv/proxy/"
     name = "api:xiaomi_tv:proxy"
@@ -16,9 +16,12 @@ class MyProxyView(ProxyView):
         if not target_url:
             LOGGER.error("No target URL provided")
             return None
-
         try:
-            return ProxiedURL(target_url, headers={}, allow_unauthenticated=True)
+            return ProxiedURL(
+              target_url,
+              headers={},
+              allow_unauthenticated=True
+            )
         except Exception as e:
             LOGGER.error(f"Failed to create proxied URL: {e}")
             return None

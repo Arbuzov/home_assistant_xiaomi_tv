@@ -19,6 +19,7 @@ from homeassistant.const import CONF_HOST, CONF_NAME, STATE_OFF, STATE_ON
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
+from urllib.parse import quote
 
 from .const import DOMAIN
 from .switch import XiaomiTVStatusSwitch
@@ -166,7 +167,10 @@ class XiaomiTV(MediaPlayerEntity):
                     media_class=MediaClass.APP,
                     media_content_id=item['PackageName'],
                     media_content_type=MediaType.APP,
-                    thumbnail=item['IconURL'].replace('\\', ''),
+                    thumbnail=(
+                        '/api/xiaomi_tv/proxy/?url=',
+                        f'{quote(item['IconURL'].replace('\\', ''))}'
+                    ),
                     can_play=True,
                     can_expand=False,
                     children=[]
