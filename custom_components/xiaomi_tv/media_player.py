@@ -19,6 +19,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_NAME, STATE_OFF, STATE_ON
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.network import get_url
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
 from .const import DOMAIN
@@ -167,10 +168,7 @@ class XiaomiTV(MediaPlayerEntity):
                     media_class=MediaClass.APP,
                     media_content_id=item['PackageName'],
                     media_content_type=MediaType.APP,
-                    thumbnail=(
-                        '/api/xiaomi_tv/proxy/?url=',
-                        quote(item['IconURL'].replace('\\', ''))
-                    ),
+                    thumbnail=f"{get_url(self._hass)}/api/xiaomi_tv/proxy/?url={quote(item['IconURL'].replace('\\', ''))}",
                     can_play=True,
                     can_expand=False,
                     children=[]
@@ -253,7 +251,7 @@ class XiaomiTV(MediaPlayerEntity):
             async with aiohttp.ClientSession() as session:
                 async with session.get(tv_url) as resp:
                     response = await resp.json(content_type='text/json')
-                    LOGGER.warning(response['data'])
+                    LOGGER.debug(response['data'])
                     return response['data']['AppInfo']
         except aiohttp.ClientError as error:
             LOGGER.warning(error)

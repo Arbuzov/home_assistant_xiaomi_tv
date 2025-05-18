@@ -67,7 +67,10 @@ async def hack_pymitv(hass: HomeAssistant):
                             ((hack.get('line') is None) or
                              (hack.get('line') == line_number)):
                         hacked = True
-                        ip_line = ip_line.replace(hack.get('from'), hack.get('to'))
+                        ip_line = ip_line.replace(
+                            hack.get('from'),
+                            hack.get('to')
+                        )
                         LOGGER.warning(
                             'Hacked file %s line "%s" line %d',
                             hack.get('file'),
