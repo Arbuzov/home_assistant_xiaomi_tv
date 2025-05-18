@@ -27,7 +27,7 @@ LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up oiot from a config entry."""
-    await hass.async_create_task(hack_pymitv(hass))
+    await hass.async_add_executor_job(hack_pymitv(hass))
     # Исправлено: используем импортированный async_get_clientsession
     websession = async_get_clientsession(hass)
     hass.http.register_view(MyProxyView(websession))
