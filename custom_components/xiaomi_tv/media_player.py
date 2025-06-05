@@ -165,7 +165,7 @@ class XiaomiTV(MediaPlayerEntity):
             sanitized_icon_url = item['IconURL'].replace('\\', '')
             thumbnail_url = (
                 f"{get_url(self._hass)}/api/xiaomi_tv/proxy/?url="
-                f"{quote(sanitized_icon_url)}"
+                f"{quote(sanitized_icon_url, safe=':/')}"
             )
             children.append(
                 BrowseMedia(
