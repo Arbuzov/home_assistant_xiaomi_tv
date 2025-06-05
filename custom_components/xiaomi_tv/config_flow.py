@@ -1,4 +1,4 @@
-"""Config flow for the smart curtain integration."""
+"""Config flow for the Xiaomi TV integration."""
 from __future__ import annotations
 
 from typing import Any
