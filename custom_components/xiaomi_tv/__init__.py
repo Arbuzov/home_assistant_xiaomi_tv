@@ -64,9 +64,10 @@ async def hack_pymitv(hass: HomeAssistant):
                 ) as f:
                     line_number = 1
                     for ip_line in f:
-                        if hack.get('from') in ip_line and \
-                                ((hack.get('line') is None) or
-                                (hack.get('line') == line_number)):
+                        if hack.get('from') in ip_line and (
+                            (hack.get('line') is None)
+                            or (hack.get('line') == line_number)
+                        ):
                             hacked = True
                             ip_line = ip_line.replace(
                                 hack.get('from'),

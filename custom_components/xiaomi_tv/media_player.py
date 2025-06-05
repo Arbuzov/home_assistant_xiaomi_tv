@@ -162,13 +162,18 @@ class XiaomiTV(MediaPlayerEntity):
 
         children = []
         for item in media_list:
+            sanitized_icon_url = item['IconURL'].replace('\\', '')
+            thumbnail_url = (
+                f"{get_url(self._hass)}/api/xiaomi_tv/proxy/?url="
+                f"{quote(sanitized_icon_url)}"
+            )
             children.append(
                 BrowseMedia(
                     title=item['AppName'],
                     media_class=MediaClass.APP,
                     media_content_id=item['PackageName'],
                     media_content_type=MediaType.APP,
-                    thumbnail=f"{get_url(self._hass)}/api/xiaomi_tv/proxy/?url={quote(item['IconURL'].replace('\\', ''))}",
+                    thumbnail=thumbnail_url,
                     can_play=True,
                     can_expand=False,
                     children=[]
