@@ -1,6 +1,6 @@
 # Xiaomi TV custom component
 
-Use it in your own risk
+Use it at your own risk
 
 ## Notable changes to official integration
 
