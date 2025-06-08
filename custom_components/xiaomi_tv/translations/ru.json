@@ -1,0 +1,29 @@
+{
+  "issue": {
+    "restart_required": {
+      "title": "Требуется перезапуск",
+      "description": "Необходимо перезапустить Home Assistant, чтобы изменения вступили в силу.",
+      "suggested_action": "Перезапустить Home Assistant"
+    }
+  },
+  "config": {
+    "title": "Xiaomi TV",
+    "description": "Интеграция Xiaomi TV позволяет управлять телевизором Xiaomi из Home Assistant.",
+    "step": {
+      "user": {
+        "title": "Подключение к Xiaomi TV",
+        "description": "Пожалуйста, введите IP-адрес и порт вашего Xiaomi TV.",
+        "data": {
+          "host": "IP-адрес",
+          "port": "Порт"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": {
+        "title": "Не удалось подключиться к Xiaomi TV",
+        "description": "Пожалуйста, проверьте IP-адрес и порт вашего Xiaomi TV."
+      }
+    }
+  }
+}

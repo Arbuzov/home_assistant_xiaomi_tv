@@ -1,0 +1,29 @@
+{
+  "issue": {
+    "restart_required": {
+      "title": "再起動が必要です",
+      "description": "変更を有効にするには Home Assistant を再起動する必要があります。",
+      "suggested_action": "Home Assistant を再起動"
+    }
+  },
+  "config": {
+    "title": "Xiaomi TV",
+    "description": "Xiaomi TV インテグレーションは Home Assistant から Xiaomi TV を操作できます。",
+    "step": {
+      "user": {
+        "title": "Xiaomi TV に接続",
+        "description": "Xiaomi TV の IP アドレスとポートを入力してください。",
+        "data": {
+          "host": "IP アドレス",
+          "port": "ポート"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": {
+        "title": "Xiaomi TV に接続できません",
+        "description": "Xiaomi TV の IP アドレスとポートを確認してください。"
+      }
+    }
+  }
+}

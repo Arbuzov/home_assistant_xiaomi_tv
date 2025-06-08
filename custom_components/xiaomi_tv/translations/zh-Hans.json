@@ -1,0 +1,29 @@
+{
+  "issue": {
+    "restart_required": {
+      "title": "需要重启",
+      "description": "您需要重启 Home Assistant 以使更改生效。",
+      "suggested_action": "重启 Home Assistant"
+    }
+  },
+  "config": {
+    "title": "小米电视",
+    "description": "小米电视集成允许您在 Home Assistant 中控制您的小米电视。",
+    "step": {
+      "user": {
+        "title": "连接到小米电视",
+        "description": "请输入您的小米电视的 IP 地址和端口。",
+        "data": {
+          "host": "IP 地址",
+          "port": "端口"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": {
+        "title": "无法连接到小米电视",
+        "description": "请检查您的小米电视的 IP 地址和端口。"
+      }
+    }
+  }
+}
