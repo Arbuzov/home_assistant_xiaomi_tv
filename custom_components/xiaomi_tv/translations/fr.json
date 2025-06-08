@@ -1,0 +1,31 @@
+{
+  "issues": {
+    "restart_required": {
+      "title": "Redémarrage requis",
+      "fix_flow": {
+        "step": {
+          "confirm_restart": {
+            "title": "Redémarrage requis",
+            "description": "Le redémarrage de Home Assistant est nécessaire pour terminer le téléchargement/la mise à jour de {name}. Cliquez sur \"Soumettre\" pour redémarrer maintenant."
+          }
+        }
+      }
+    }
+  },
+  "config": {
+    "title": "Xiaomi TV",
+    "step": {
+      "user": {
+        "title": "Connecter la Xiaomi TV",
+        "description": "Veuillez saisir l'adresse IP et le port de votre Xiaomi TV.",
+        "data": {
+          "host": "Adresse IP",
+          "port": "Port"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Veuillez vérifier l'adresse IP et le port de votre Xiaomi TV."
+    }
+  }
+}
