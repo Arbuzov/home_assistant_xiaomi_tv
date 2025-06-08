@@ -14,7 +14,6 @@
   },
   "config": {
     "title": "Xiaomi TV",
-    "description": "Xiaomi TV integration allows you to control your Xiaomi TV from Home Assistant.",
     "step": {
       "user": {
         "title": "Connect to Xiaomi TV",
@@ -26,10 +25,7 @@
       }
     },
     "error": {
-      "cannot_connect": {
-        "title": "Cannot connect to Xiaomi TV",
-        "description": "Please check the IP address and port of your Xiaomi TV."
-      }
+      "cannot_connect": "Please check the IP address and port of your Xiaomi TV."
     }
   }
 }
