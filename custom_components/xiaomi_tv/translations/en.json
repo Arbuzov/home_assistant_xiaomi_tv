@@ -1,9 +1,15 @@
 {
-  "issue": {
+  "issues": {
     "restart_required": {
       "title": "Restart required",
-      "description": "You need to restart Home Assistant for changes to take effect.",
-      "suggested_action": "Restart Home Assistant"
+      "fix_flow": {
+        "step": {
+          "confirm_restart": {
+            "title": "Restart required",
+            "description": "Restart of Home Assistant is required to finish download/update of {name}, click submit to restart now."
+          }
+        }
+      }
     }
   },
   "config": {
