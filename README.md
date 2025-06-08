@@ -1,5 +1,10 @@
 # Xiaomi TV Custom Component
 
+[![Validate](https://github.com/Arbuzov/home_assistant_xiaomi_tv/actions/workflows/validate.yml/badge.svg)](https://github.com/Arbuzov/home_assistant_xiaomi_tv/actions/workflows/validate.yml)
+[![Release](https://github.com/Arbuzov/home_assistant_xiaomi_tv/actions/workflows/release.yaml/badge.svg)](https://github.com/Arbuzov/home_assistant_xiaomi_tv/actions/workflows/release.yaml)
+[![Project Stage: Beta](https://img.shields.io/badge/project%20stage-beta-orange)](https://github.com/Arbuzov/home_assistant_xiaomi_tv)
+[![Add to your Home Assistant](https://my.home-assistant.io/badges/config_flow.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=xiaomi_tv)
+
 This repository provides a Home Assistant custom component for controlling Xiaomi televisions. The integration extends the official Xiaomi TV implementation and includes additional features for convenient management via the Home Assistant UI.
 
 ## Features
