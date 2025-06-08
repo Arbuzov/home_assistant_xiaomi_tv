@@ -1,0 +1,31 @@
+{
+  "issues": {
+    "restart_required": {
+      "title": "需要重启",
+      "fix_flow": {
+        "step": {
+          "confirm_restart": {
+            "title": "需要重启",
+            "description": "需要重启 Home Assistant 以完成 {name} 的下载/更新，点击提交立即重启。"
+          }
+        }
+      }
+    }
+  },
+  "config": {
+    "title": "Xiaomi TV",
+    "step": {
+      "user": {
+        "title": "连接到小米电视",
+        "description": "请输入您小米电视的 IP 地址和端口。",
+        "data": {
+          "host": "IP 地址",
+          "port": "端口"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "请检查您小米电视的 IP 地址和端口。"
+    }
+  }
+}

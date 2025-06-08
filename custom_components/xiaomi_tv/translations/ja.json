@@ -1,0 +1,31 @@
+{
+  "issues": {
+    "restart_required": {
+      "title": "再起動が必要です",
+      "fix_flow": {
+        "step": {
+          "confirm_restart": {
+            "title": "再起動が必要です",
+            "description": "Home Assistant のダウンロードまたは更新を完了するには {name} を再起動する必要があります。\u3000\u3000送信をクリックすると今すぐ再起動します。"
+          }
+        }
+      }
+    }
+  },
+  "config": {
+    "title": "Xiaomi TV",
+    "step": {
+      "user": {
+        "title": "Xiaomi TV に接続",
+        "description": "Xiaomi TV の IP アドレスとポートを入力してください。",
+        "data": {
+          "host": "IP アドレス",
+          "port": "ポート"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Xiaomi TV の IP アドレスとポートを確認してください。"
+    }
+  }
+}

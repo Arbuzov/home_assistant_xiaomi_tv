@@ -1,0 +1,31 @@
+{
+  "issues": {
+    "restart_required": {
+      "title": "Требуется перезагрузка",
+      "fix_flow": {
+        "step": {
+          "confirm_restart": {
+            "title": "Требуется перезагрузка",
+            "description": "Чтобы завершить загрузку/обновление {name}, требуется перезапуск Home Assistant. Нажмите \"Отправить\", чтобы перезапустить сейчас."
+          }
+        }
+      }
+    }
+  },
+  "config": {
+    "title": "Xiaomi TV",
+    "step": {
+      "user": {
+        "title": "Подключение к Xiaomi TV",
+        "description": "Пожалуйста, укажите IP-адрес и порт вашего телевизора Xiaomi.",
+        "data": {
+          "host": "IP-адрес",
+          "port": "Порт"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Проверьте IP-адрес и порт вашего Xiaomi TV."
+    }
+  }
+}
