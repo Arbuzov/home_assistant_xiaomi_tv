@@ -20,6 +20,7 @@ from homeassistant.const import CONF_HOST, CONF_NAME, STATE_OFF, STATE_ON
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.network import get_url
+from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
 from .const import DOMAIN
@@ -84,7 +85,7 @@ async def async_setup_entry(
     return True
 
 
-class XiaomiTV(MediaPlayerEntity):
+class XiaomiTV(MediaPlayerEntity, RestoreEntity):
     """Represent the Xiaomi TV for Home Assistant."""
 
     _attr_supported_features = (
@@ -116,6 +117,25 @@ class XiaomiTV(MediaPlayerEntity):
         self._volume = 1
         self._max_volume = 1
 
+    async def async_added_to_hass(self) -> None:
+        """Handle entity which will be added to Home Assistant."""
+        await super().async_added_to_hass()
+        last_state = await self.async_get_last_state()
+        if last_state:
+            self._hass.data.setdefault(DOMAIN, {})
+            self._hass.data[DOMAIN].setdefault(self._config_id, {})
+            self._hass.data[DOMAIN][self._config_id].update(
+                {
+                    "state": last_state.state,
+                    "source": last_state.attributes.get("source", "hdmi1"),
+                }
+            )
+        else:
+            self._hass.data.setdefault(DOMAIN, {})
+            self._hass.data[DOMAIN].setdefault(
+                self._config_id, {"state": STATE_OFF, "source": "hdmi1"}
+            )
+
     @property
     def name(self):
         """Return the display name of this TV."""
@@ -130,6 +150,11 @@ class XiaomiTV(MediaPlayerEntity):
     def source(self):
         """Return the current input source."""
         return self._hass.data[DOMAIN][self._config_id].get('source', 'hdmi1')
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Return entity specific state attributes."""
+        return {"source": self.source}
 
     async def async_select_source(self, source):
         """Select input source."""
