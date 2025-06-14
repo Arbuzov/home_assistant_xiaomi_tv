@@ -108,5 +108,6 @@ async def hack_pymitv(hass: HomeAssistant):
             is_fixable=True,
             issue_domain=DOMAIN,
             severity=IssueSeverity.WARNING,
-            translation_key="restart_required"
+            translation_key="restart_required",
+            translation_placeholders={"name": "pymitv"},
         )
