@@ -92,15 +92,6 @@ async def hack_pymitv(hass: HomeAssistant):
     hacked = await hass.async_add_executor_job(_hack_pymitv_sync)
 
     if hacked:
-        await hass.services.async_call(
-            'persistent_notification',
-            'create',
-            {
-                'message': 'Please reboot HA to apply the changes',
-                'title': 'Pymitv was hacked',
-                'notification_id': f'{DOMAIN}_event'
-            }
-        )
         async_create_issue(
             hass=hass,
             domain=DOMAIN,
