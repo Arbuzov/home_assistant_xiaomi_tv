@@ -29,6 +29,8 @@ from .switch import XiaomiTVStatusSwitch
 
 DEFAULT_NAME = 'Xiaomi TV'
 
+HTTP_REQUEST_TIMEOUT = 10
+
 LOGGER = logging.getLogger(__name__)
 
 # No host is needed for configuration, however it can be set.
@@ -252,7 +254,10 @@ class XiaomiTV(MediaPlayerEntity, RestoreEntity):
         tv_url = 'http://{}:6095/controller?action=getVolume'.format(
             self._tv.ip_address)
         try:
-            async with self._session.get(tv_url) as resp:
+            async with self._session.get(
+                tv_url, timeout=HTTP_REQUEST_TIMEOUT
+            ) as resp:
+                resp.raise_for_status()
                 response = await resp.json(content_type='text/json')
                 self._volume = response['data']['volume']
                 self._max_volume = response['data']['maxVolume']
@@ -266,7 +271,10 @@ class XiaomiTV(MediaPlayerEntity, RestoreEntity):
             f'?action=startapp&type=packagename&packagename={package}'
         )
         try:
-            await self._session.get(tv_url)
+            async with self._session.get(
+                tv_url, timeout=HTTP_REQUEST_TIMEOUT
+            ) as resp:
+                resp.raise_for_status()
         except aiohttp.ClientError as error:
             LOGGER.warning(error)
 
@@ -277,7 +285,10 @@ class XiaomiTV(MediaPlayerEntity, RestoreEntity):
             '?action=getinstalledapp&count=999&changeIcon=1'
         )
         try:
-            async with self._session.get(tv_url) as resp:
+            async with self._session.get(
+                tv_url, timeout=HTTP_REQUEST_TIMEOUT
+            ) as resp:
+                resp.raise_for_status()
                 response = await resp.json(content_type='text/json')
                 LOGGER.debug(response['data'])
                 return response['data']['AppInfo']
