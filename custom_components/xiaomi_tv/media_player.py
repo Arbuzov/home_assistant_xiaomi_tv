@@ -21,8 +21,8 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.network import get_url
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
-from .const import DOMAIN
 from . import pymitv
+from .const import DOMAIN
 from .switch import XiaomiTVStatusSwitch
 
 DEFAULT_NAME = 'Xiaomi TV'

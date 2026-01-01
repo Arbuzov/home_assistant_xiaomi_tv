@@ -2,6 +2,7 @@
 The pymitv.Discover module is in charge of discovering local TVs.
 """
 import socket
+
 import requests
 
 
