@@ -4,12 +4,18 @@ from .navigator import Navigator
 
 
 class TV:
-    """A virtual representation of the TV that stores state, and takes controls."""
+    """A virtual representation of the TV that stores state and controls."""
     ip_address = None
     state = True
     source = None
 
-    def __init__(self, ip_address=None, source=None, initialized=True, assume_state=True):
+    def __init__(
+        self,
+        ip_address=None,
+        source=None,
+        initialized=True,
+        assume_state=True,
+    ):
         # Check if an IP address has been supplied to the constructor
         if ip_address is None:
             print('No TV supplied, hence it won\'t work')
@@ -40,7 +46,7 @@ using any of the polyfill controls, could produce weird results.')
         return Control().send_keystrokes(self.ip_address, keystroke, wait)
 
         # Send True regardless of whether or not command was sent
-        #return True
+        # return True
 
     def change_source(self, source):
         """Change source of xiaomi tv"""

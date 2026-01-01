@@ -4,7 +4,9 @@ that can connect to Xiaomi TVs, and control them.
 """
 
 
-from .discover import Discover
-from .control import Control
-from .navigator import Navigator
-from .tv import TV
+from .control import Control  # noqa: F401
+from .discover import Discover  # noqa: F401
+from .navigator import Navigator  # noqa: F401
+from .tv import TV  # noqa: F401
+
+__all__ = ["Control", "Discover", "Navigator", "TV"]

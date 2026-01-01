@@ -6,7 +6,7 @@ import requests
 
 
 class Discover:
-    """This class handles discovery and checking of local Xiaomi TVs"""
+    """This class handles discovery and checking of local Xiaomi TVs."""
     def __init__(self):
         pass
 
@@ -40,16 +40,21 @@ class Discover:
 
     @staticmethod
     def check_ip(ip_address, log=False):
-        """Attempts a connection to the TV and checks if there really is a TV."""
+        """Attempts a connection to the TV and checks if there is a TV."""
         if log:
             print('Checking ip: {}...'.format(ip_address))
 
         request_timeout = 1
 
         try:
-            tv_url = 'http://{}:6095/request?action=isalive'.format(ip_address)
+            tv_url = "http://{}:6095/request?action=isalive".format(
+                ip_address
+            )
             request = requests.get(tv_url, timeout=request_timeout)
-        except (requests.exceptions.ConnectTimeout, requests.exceptions.ConnectionError):
+        except (
+            requests.exceptions.ConnectTimeout,
+            requests.exceptions.ConnectionError,
+        ):
             return False
 
         return request.status_code == 200

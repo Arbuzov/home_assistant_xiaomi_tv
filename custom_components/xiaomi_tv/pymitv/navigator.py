@@ -1,5 +1,6 @@
 """
-The pymitv.Discover module is in charge of calculating navigation routes on the TV.
+The pymitv.Discover module is in charge of calculating navigation routes on the
+TV.
 """
 
 
