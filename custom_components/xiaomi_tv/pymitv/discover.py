@@ -7,7 +7,7 @@ import requests
 
 class Discover:
     """This class handles discovery and checking of local Xiaomi TVs"""
-    def __init(self):
+    def __init__(self):
         pass
 
     def scan(self, stop_on_first=True, base_ip=0):
