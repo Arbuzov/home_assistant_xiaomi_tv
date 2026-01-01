@@ -18,14 +18,18 @@ from homeassistant.components.media_player import (PLATFORM_SCHEMA,
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, CONF_NAME, STATE_OFF, STATE_ON
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.network import get_url
+from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
 from .const import DOMAIN
 from .switch import XiaomiTVStatusSwitch
 
 DEFAULT_NAME = 'Xiaomi TV'
+
+HTTP_REQUEST_TIMEOUT = 10
 
 LOGGER = logging.getLogger(__name__)
 
@@ -84,7 +88,7 @@ async def async_setup_entry(
     return True
 
 
-class XiaomiTV(MediaPlayerEntity):
+class XiaomiTV(MediaPlayerEntity, RestoreEntity):
     """Represent the Xiaomi TV for Home Assistant."""
 
     _attr_supported_features = (
@@ -113,8 +117,28 @@ class XiaomiTV(MediaPlayerEntity):
         self._config_id = f'{DOMAIN}_{self._ip}'
         self._attr_unique_id = f'{self._config_id}_{self.__class__.__name__}'
         self._hass = hass
+        self._session = async_get_clientsession(hass)
         self._volume = 1
         self._max_volume = 1
+
+    async def async_added_to_hass(self) -> None:
+        """Handle entity which will be added to Home Assistant."""
+        await super().async_added_to_hass()
+        last_state = await self.async_get_last_state()
+        if last_state:
+            self._hass.data.setdefault(DOMAIN, {})
+            self._hass.data[DOMAIN].setdefault(self._config_id, {})
+            self._hass.data[DOMAIN][self._config_id].update(
+                {
+                    "state": last_state.state,
+                    "source": last_state.attributes.get("source", "hdmi1"),
+                }
+            )
+        else:
+            self._hass.data.setdefault(DOMAIN, {})
+            self._hass.data[DOMAIN].setdefault(
+                self._config_id, {"state": STATE_OFF, "source": "hdmi1"}
+            )
 
     @property
     def name(self):
@@ -130,6 +154,11 @@ class XiaomiTV(MediaPlayerEntity):
     def source(self):
         """Return the current input source."""
         return self._hass.data[DOMAIN][self._config_id].get('source', 'hdmi1')
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Return entity specific state attributes."""
+        return {"source": self.source}
 
     async def async_select_source(self, source):
         """Select input source."""
@@ -225,11 +254,13 @@ class XiaomiTV(MediaPlayerEntity):
         tv_url = 'http://{}:6095/controller?action=getVolume'.format(
             self._tv.ip_address)
         try:
-            async with aiohttp.ClientSession() as session:
-                async with session.get(tv_url) as resp:
-                    response = await resp.json(content_type='text/json')
-                    self._volume = response['data']['volume']
-                    self._max_volume = response['data']['maxVolume']
+            async with self._session.get(
+                tv_url, timeout=HTTP_REQUEST_TIMEOUT
+            ) as resp:
+                resp.raise_for_status()
+                response = await resp.json(content_type='text/json')
+                self._volume = response['data']['volume']
+                self._max_volume = response['data']['maxVolume']
         except aiohttp.ClientError as error:
             LOGGER.warning(error)
 
@@ -240,8 +271,10 @@ class XiaomiTV(MediaPlayerEntity):
             f'?action=startapp&type=packagename&packagename={package}'
         )
         try:
-            async with aiohttp.ClientSession() as session:
-                await session.get(tv_url)
+            async with self._session.get(
+                tv_url, timeout=HTTP_REQUEST_TIMEOUT
+            ) as resp:
+                resp.raise_for_status()
         except aiohttp.ClientError as error:
             LOGGER.warning(error)
 
@@ -252,11 +285,13 @@ class XiaomiTV(MediaPlayerEntity):
             '?action=getinstalledapp&count=999&changeIcon=1'
         )
         try:
-            async with aiohttp.ClientSession() as session:
-                async with session.get(tv_url) as resp:
-                    response = await resp.json(content_type='text/json')
-                    LOGGER.debug(response['data'])
-                    return response['data']['AppInfo']
+            async with self._session.get(
+                tv_url, timeout=HTTP_REQUEST_TIMEOUT
+            ) as resp:
+                resp.raise_for_status()
+                response = await resp.json(content_type='text/json')
+                LOGGER.debug(response['data'])
+                return response['data']['AppInfo']
         except aiohttp.ClientError as error:
             LOGGER.warning(error)
             return []
