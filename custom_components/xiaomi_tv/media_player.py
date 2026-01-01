@@ -7,7 +7,6 @@ from urllib.parse import quote
 
 import aiohttp
 import homeassistant.helpers.config_validation as cv
-import pymitv
 import voluptuous as vol
 from homeassistant.components.media_player import (PLATFORM_SCHEMA,
                                                    BrowseMedia, MediaClass,
@@ -23,6 +22,7 @@ from homeassistant.helpers.network import get_url
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
 from .const import DOMAIN
+from . import pymitv
 from .switch import XiaomiTVStatusSwitch
 
 DEFAULT_NAME = 'Xiaomi TV'
